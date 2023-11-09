@@ -1,10 +1,31 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { HereoModel } from 'src/app/models/heroe.model';
+import { NgForm } from '@angular/forms';
 
 @Component({
   selector: 'app-heroe',
   templateUrl: './heroe.component.html',
   styleUrls: ['./heroe.component.css']
 })
-export class HeroeComponent {
+export class HeroeComponent implements OnInit{
+
+  heroe = new HereoModel();
+
+  constructor(){}
+
+  ngOnInit() {
+
+  }
+
+  guardar( form: NgForm){
+
+    if (form.invalid) {
+      console.log('formulario no valido')
+      return;
+    }
+
+    console.log(form);
+    console.log(this.heroe);
+  }
 
 }
