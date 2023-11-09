@@ -23,5 +23,14 @@ export class HeroesService {
     );
   }
 
+  actualizarHeroe( heroe: HereoModel){
+
+    const { id, ...heroeTemp } = heroe;
+
+
+    return this.http.put(`${ this.url}/heroes/${heroe.id}.json`, heroeTemp);
+
+  }
+
 
 }
