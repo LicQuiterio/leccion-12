@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { HereoModel } from 'src/app/models/heroe.model';
+import { HeroeModel } from 'src/app/models/heroe.model';
 import { NgForm } from '@angular/forms';
 import { HeroesService } from 'src/app/services/heroes.service';
 
 import Swal from 'sweetalert2';
 import { Observable } from 'rxjs';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-heroe',
@@ -13,11 +14,23 @@ import { Observable } from 'rxjs';
 })
 export class HeroeComponent implements OnInit {
 
-  heroe = new HereoModel();
+  heroe:HeroeModel = new HeroeModel();
 
-  constructor(private heroesService: HeroesService) { }
+  constructor(private heroesService: HeroesService,
+              private route:ActivatedRoute) { }
 
   ngOnInit() {
+
+    const id = this.route.snapshot.paramMap.get('id');
+
+    if (id !== 'nuevo') {
+
+      this.heroesService.getHeroe( id )
+      .subscribe((resp:any)=>{
+        this.heroe = resp;
+        this.heroe.id;
+      });
+    }
 
   }
 
@@ -40,11 +53,12 @@ export class HeroeComponent implements OnInit {
 
     if (this.heroe.id) {
       peticion = this.heroesService.actualizarHeroe(this.heroe);
+      console.log(this.heroe.id);
     } else {
       peticion = this.heroesService.crearHeroe(this.heroe);
     }
 
-    peticion.subscribe( rep => {
+    peticion.subscribe( resp => {
       Swal.fire({
         title: this.heroe.nombre,
         text: 'Se actualizo correctamente',
